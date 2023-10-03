@@ -1,0 +1,2 @@
+type this into terminal to start enviroment .\env\Scripts\Activate.ps1
+then type python app.py
