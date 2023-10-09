@@ -1,0 +1,84 @@
+/*login css*/
+
+.main-login-container {
+  width: 28%;
+  height: 75%;
+  border-radius: 20px;
+  border: 2px solid #3C3232;
+  border: 2px solid #E6DEDE;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.main-login-container h1 {
+  font-size: 40px;
+  margin-bottom: 2vh;
+}
+.line-break {
+  height: 2px;
+  width: 80%;
+  background-color:#625353;
+  border-radius: 8px;
+}
+.secondary-login-container {
+  width: 80%;
+  height: 70%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.third-login-container {
+  width: 100%;
+  height: 50%;
+  margin-top: 30px;
+}
+.third-login-container h2 {
+  color: #625353;
+  font-weight: 400;
+  margin-bottom: 1vh;
+  font-size: 26px;
+}
+#username, #password {
+  background-color: #f0f0f0;
+  border: 1px solid #3C3232;
+  border-radius: 12px;
+  height: 40px;
+  width: 100%;
+  padding: 0 10px;
+  font-size: 14px;
+}
+#username {
+  margin-bottom: 2vh;
+}
+.fourth-login-container {
+  width: 100%;
+  height: 25%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.fourth-login-container h2 {
+  font-size: 20px;
+}
+.fourth-login-container h3 {
+  font-size: 16px;
+  color:#817272;
+  font-weight: 400;
+}
+.remember-container {
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2vh;
+}
+.remember-container h2 {
+  font-size: 18px;
+  font-weight: 400;
+  color: #817272;
+  color: #3C3232;
+}
+#reminder-checkbox {
+  transform: scale(1.5);
+  color: #3C3232;
+}

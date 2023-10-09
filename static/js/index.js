@@ -40,8 +40,10 @@ card4.innerHTML = dateConvertor(4);
 
 async function checkWeather(city)
 {
-    
     const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+    if (!response.ok) {
+        window.alert(city + " is not a valid entry")
+    }
     var data = await response.json();
     console.log(data);
 
@@ -52,17 +54,29 @@ async function checkWeather(city)
     var latitude = data.coord.lat;
     var longitude = data.coord.lon;
 
-    const rainUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longitude + "&hourly=precipitation_probability&precipitation_unit=inch&timezone=America%2FNew_York&forecast_days=1"
+    const rainUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longitude + "&hourly=temperature_2m,precipitation_probability,weathercode&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=GMT&forecast_days=2"
     const rainRes = await fetch(rainUrl)
     var hourlyForc = await rainRes.json();
     console.log(hourlyForc);
     precipitation = hourlyForc.hourly.precipitation_probability;
+    hourlyTemp = hourlyForc.hourly.temperature_2m;
+
+    var tzOffset = data.timezone;
+    
 
     var timeSpan = document.querySelector(".message");
     var now = new Date();
     let hours = now.getHours();
     
-    document.querySelector(".rain").innerHTML = precipitation[hours] + "%";
+    var convHours = hours - (tzOffset/3600);
+    console.log(convHours)
+
+    document.querySelector(".rain").innerHTML = precipitation[convHours] + "%";
+    document.querySelector(".hour1").innerHTML = Math.round(hourlyTemp[convHours + 1]) + "°"
+    document.querySelector(".hour2").innerHTML = Math.round(hourlyTemp[convHours + 2])+ "°"
+    document.querySelector(".hour3").innerHTML = Math.round(hourlyTemp[convHours + 3]) + "°"
+    document.querySelector(".hour4").innerHTML = Math.round(hourlyTemp[convHours + 4]) + "°"
+
 
     if (hours > 5 && hours < 11) {
         message = "Good Morning";
@@ -121,10 +135,6 @@ async function checkWeather(city)
     nextDesc4.innerHTML = hourlyFor.list[4].weather[0].main;
 
 
-
-
-
-
     var tl = gsap.timeline();
     tl.to(".preloader", { duration: 0.2, ease: "power1", autoAlpha: 0, })
     tl.from(".logo", { y: -150, opacity: 0, duration: 0.6, ease: "power1" }, 0);
@@ -178,8 +188,8 @@ usernameBox.addEventListener("keydown", (event) => {
       usernameBox.style.backgroundColor = "white";
     }
 });
-checkWeather("New York")
 
+checkWeather("New York")
 var loginButton = document.querySelector(".login-button");
 loginButton.addEventListener('mouseenter', function(event) {
     gsap.to("")

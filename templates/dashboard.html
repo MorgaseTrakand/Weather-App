@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}
+  <title>Soliar - Dashboard</title>
+{% endblock %}
+
+{% block content %}
+<h1> You are logged in </h1>
+<a href="{{url_for('logout')}}">Log Out </a>
+{% endblock %}
