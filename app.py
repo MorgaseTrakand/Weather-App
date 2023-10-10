@@ -27,25 +27,24 @@ login_manager.login_view = "login"
 def load_user(user_id):
   return User.query.get(int(user_id))
 
-# Configure Flask-Mail for sending emails using Gmail SMTP
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
+app.config['MAIL_SERVER'] = 'smtp.elasticemail.com'
+app.config['MAIL_PORT'] = 2525
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'ethandsnyder96@gmail.com'  # Replace with your Gmail email address
-app.config['MAIL_PASSWORD'] = '1lanmandragoran'  # Replace with your Gmail password
+app.config['MAIL_USERNAME'] = 'ethandsnyder96@gmail.com'
+app.config['MAIL_PASSWORD'] = '0DF27877FF36257060BC877DF6DBE2A78B90' 
 
 mail = Mail(app)
 
 class User(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
-  # email = db.Column(db.String(20), nullable=False, unique=True)
+  email = db.Column(db.String(20), nullable=False, unique=True)
   username = db.Column(db.String(20), nullable=False, unique=True)
   password = db.Column(db.String(80), nullable=False)
   location = db.Column(db.String(80), nullable=True)
   
 class RegisterForm(FlaskForm): 
   username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-  # email = StringField(validators=[InputRequired(), Length(min= 4, max=30)], render_kw={"placeholder": "Email"})
+  email = StringField(validators=[InputRequired(), Length(min= 4, max=30)], render_kw={"placeholder": "Email"})
   password = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Password"})
   submit = SubmitField("Register")
   
@@ -53,8 +52,12 @@ class RegisterForm(FlaskForm):
     existing_user_name = User.query.filter_by(username=username.data).first()
     if existing_user_name:
       raise ValidationError("That username already exists. Please choose a different one")
-  
-  
+
+class forgotPasswordForm(FlaskForm):
+  email = StringField(validators=[InputRequired()], render_kw={"placeholder": "Email"})
+  submit = SubmitField("Login")
+
+
 class LoginForm(FlaskForm): 
   username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
   password = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Password"})
@@ -71,27 +74,51 @@ def index():
   return render_template('index.html')
 
 password_reset_tokens = {}
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    # Verify the token and expiration
+    token_info = password_reset_tokens.get(token)
+    if not token_info or token_info['expiration_time'] < datetime.datetime.now():
+        flash('Password reset link is invalid or has expired. Please request another reset link.', 'error')
 
-# @app.route('forgot_password', methods=['GET', 'POST'])
-# def forgot_password():
-#   form = LoginForm()
-#   if request.method == "POST":
-#     email = User.query.filter_by(email=form.email.data).first()  # Check by email
-#     if email:
-#       token = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
-#       expiration_time = datetime.datetime.now() + datetime.timedelta(hours=1)
-#       password_reset_tokens[email] = {'token': token, 'expiration_time': expiration_time}
-#       # Send a password reset email
-#       msg = Message('Password Reset', sender='ethandsnyder96@example.com', recipients=[email])
-#       msg.body = f"Click the following link to reset your password: {url_for('reset_password', token=token, _external=True)}"
-#       mail.send(msg)
+    if request.method == 'POST':
+        # Handle form submission
+        new_password = request.form.get('new_password')
 
-#       flash('Password reset email sent. Check your inbox.', 'success')
-#       return redirect(url_for('login'))
-#     else:
-#       flash('Email address not found in the database. Please enter a valid email.', 'error')
+        # Hash the new password and update the user's password in the database
+        user = User.query.filter_by(email=token_info['email']).first()
+        user.password = bcrypt.generate_password_hash(new_password)  # Replace with your actual password hashing function
+        db.session.commit()
 
-#     return render_template('forgot_email.html')
+        # Invalidate the token
+        del password_reset_tokens[token]
+
+        # Notify the user
+        flash('Your password has been successfully reset. You can now log in with your new password.', 'success')
+        return redirect(url_for('login'))  # Redirect to the login page
+
+    return render_template('reset_password.html', token=token)
+
+@app.route('/forgotpassword/', methods=['GET', 'POST'])
+def forgotpassword():
+  form = forgotPasswordForm()
+  if request.method == "POST":
+    email = User.query.filter_by(email=form.email.data).first()  # Check by email
+    if email:
+      token = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
+      expiration_time = datetime.datetime.now() + datetime.timedelta(hours=1)
+      password_reset_tokens[email] = {'token': token, 'expiration_time': expiration_time}
+      # Send a password reset email
+      msg = Message('Password Reset', sender='ethandsnyder96@example.com', recipients=[email])
+      msg.body = f"Click the following link to reset your password: {url_for('reset_password', token=token, _external=True)}"
+      mail.send(msg)
+
+      flash('Password reset email sent. Check your inbox.', 'success')
+      return redirect(url_for('login'))
+    else:
+      flash('Email address not found in the database. Please enter a valid email.', 'error')
+
+  return render_template('forgotpassword.html', form=form)
 
 
 @app.route('/dashboard/', methods=['GET', 'POST'])
@@ -124,8 +151,9 @@ def register():
   form = RegisterForm()
   
   if form.validate_on_submit():
+    email = form.email.data
     hashed_password = bcrypt.generate_password_hash(form.password.data)
-    new_user = User(username=form.username.data, password=hashed_password)
+    new_user = User(username=form.username.data, password=hashed_password, email=email)
     db.session.add(new_user)
     db.session.commit()
     return redirect(url_for('login'))

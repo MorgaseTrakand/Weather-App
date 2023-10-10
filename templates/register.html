@@ -18,6 +18,7 @@
       <form action="" method="POST">
         {{ form.hidden_tag() }}
         {{ form.username(class="username-input")}}
+        {{ form.email(class="username-input")}}
         <!--{{ form.email }}-->
         {{ form.password(class="password-input")}}
         <h2>Already Registered? <a href="{{ url_for('login')}}">Login Here</a></h2>

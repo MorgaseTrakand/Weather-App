@@ -334,8 +334,7 @@ i {
     width: 100%;
   }
   .right-header {
-    left: 0;
-    margin-left: 20px;
+    width: 100%;
   }
   .hero {
     width: 100%;
@@ -349,15 +348,46 @@ i {
   }
   .right-container {
     width: 100%;
-    height: 40vh;
+    height: 80vh;
+  }
+  /*
+  .left-container {
+    height: 100vh;
+    width: 100%;
+  }
+  .right-container {
+    width: 100%;
+    height: 80vh;
+  }
+  .left-container {
+    height: 110vh;
+  }
+  .top-row {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    height: 50%;
   }
-  .hourly {
-    flex-direction: row;
-    width: 50%;
-    height: 100%;
+  .c-one {
+    display: none;
   }
+  .c-two {
+    width: 100%;
+    height: 60%;
+  }
+  .c-three {
+    width: 100%;
+    height: 40%;
+    display: flex;
+    align-items: center;
+  }
+  .c-three-container-one {
+    margin: 0;
+  }
+  .c-three-container-two {
+    margin: 0;
+    margin-top: 1vh;
+  }
+  */
   .main-condition {
     font-size: 30px;
   }
@@ -379,6 +409,13 @@ i {
   .main-condition {
     font-size: 24px;
   }
+  .main-temp {
+    font-size: 90px;
+  }
+  .bottom-row {
+    margin: auto;
+    width: 70%;
+  }
 }
 @media (max-width: 768px) {
   #searchBar {
@@ -387,9 +424,49 @@ i {
   .location-button {
     display: none;
   }
-  .login-button {
+  .left-container {
+    height: 100vh;
+    width: 100%;
+  }
+  .right-container {
+    width: 100%;
+    height: 80vh;
+    /* display: flex;
+    flex-direction: row; */
+  }
+  .left-container {
+    height: 110vh;
+  }
+  .top-row {
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+  }
+  .c-one {
     display: none;
-  } 
+  }
+  .c-two {
+    width: 100%;
+    height: 60%;
+  }
+  .c-three {
+    width: 100%;
+    height: 40%;
+    display: flex;
+    align-items: center;
+  }
+  .c-three-container-one {
+    margin: 0;
+  }
+  .c-three-container-two {
+    margin: 0;
+    margin-top: 1vh;
+  }
+}
+@media (max-width: 390px) {
+  .bottom-row {
+    width: 100%;
+  }
 }
 
 .centered {
