@@ -72,10 +72,39 @@ async function checkWeather(city)
     console.log(convHours)
 
     document.querySelector(".rain").innerHTML = precipitation[convHours] + "%";
-    document.querySelector(".hour1").innerHTML = Math.round(hourlyTemp[convHours + 1]) + "°"
-    document.querySelector(".hour2").innerHTML = Math.round(hourlyTemp[convHours + 2])+ "°"
-    document.querySelector(".hour3").innerHTML = Math.round(hourlyTemp[convHours + 3]) + "°"
-    document.querySelector(".hour4").innerHTML = Math.round(hourlyTemp[convHours + 4]) + "°"
+    document.querySelector(".hour1").innerHTML = Math.round(hourlyTemp[convHours + 1]) + "°";
+    document.querySelector(".hour2").innerHTML = Math.round(hourlyTemp[convHours + 2]) + "°";
+    document.querySelector(".hour3").innerHTML = Math.round(hourlyTemp[convHours + 3]) + "°";
+    document.querySelector(".hour4").innerHTML = Math.round(hourlyTemp[convHours + 4]) + "°";
+    // document.querySelector(".rain1").innerHTML = precipitation[convHours + 1] + "%";
+    // document.querySelector(".rain2").innerHTML = precipitation[convHours + 2] + "%";
+    // document.querySelector(".rain3").innerHTML = precipitation[convHours + 3] + "%";
+    // document.querySelector(".rain4").innerHTML = precipitation[convHours + 4] + "%";
+    function updateRainPercentage(elementSelector, newText) {
+        const rainElement = document.querySelector(elementSelector);
+      
+        if (rainElement) {
+          const iconElement = rainElement.querySelector(".bx-cloud-light-rain");
+      
+          const textNode = document.createTextNode(newText);
+      
+          rainElement.innerHTML = '';
+      
+          rainElement.appendChild(iconElement);
+          rainElement.appendChild(textNode);
+        }
+      }
+      updateRainPercentage(".rain1", precipitation[convHours + 1] + "%");
+      updateRainPercentage(".rain2", precipitation[convHours + 2] + "%");
+      updateRainPercentage(".rain3", precipitation[convHours + 3] + "%");
+      updateRainPercentage(".rain4", precipitation[convHours + 4] + "%");
+      
+      
+      
+      
+      
+      
+
 
 
     if (hours > 5 && hours < 11) {
@@ -89,12 +118,26 @@ async function checkWeather(city)
     }
     timeSpan.innerHTML = message;
     let minutes = now.getMinutes();
-    const amOrPm = hours >= 12 ? 'PM' : 'AM';    
+    var amOrPm = hours >= 12 ? 'PM' : 'AM';    
     hours = hours % 12;
     hours = hours || 12;
     minutes = minutes < 10 ? `0${minutes}` : minutes;
     const formattedTime = `${hours}:${minutes} ${amOrPm}`;
     document.querySelector(".current-time").innerHTML = formattedTime;
+
+    function returnHours(hours, minutes, amORpm) {
+        if (hours + 1 >= 13) {
+            hours -= 11;
+            amORpm = amORpm === "AM" ? "PM" : "AM"; 
+        } else {
+            hours += 1;
+        }
+        return `${hours}:${minutes} ${amORpm}`;
+    }
+    document.querySelector(".time1").innerHTML = returnHours(hours, minutes, amOrPm);
+    document.querySelector(".time2").innerHTML = returnHours(hours + 1, minutes, amOrPm);
+    document.querySelector(".time3").innerHTML = returnHours(hours + 2, minutes, amOrPm);
+    document.querySelector(".time4").innerHTML = returnHours(hours + 3, minutes, amOrPm);
 
     document.querySelector(".location").innerHTML = data.name;
     let windNum = data.wind.speed;

@@ -39,8 +39,7 @@ body {
 }
 
 h1 {
-  margin: 0.5em 0 1em;
-  font-size: 26px;
+  font-size: 34px;
   line-height: 1.2;
   color: var(--almost-black);
   color: var(--main-font-color);
@@ -60,23 +59,28 @@ p {
 /* Cards */
 .card-wrapper {
   height: 100vh;
-  margin: 0 auto;
-  padding: 90px 30px;
-  flex-wrap: wrap;
+  width: 100%;
+  /* margin: 0 auto;
+  padding: 90px 30px; */
+  /* flex-wrap: wrap; */
   justify-content: center;
   display: flex;
+  align-items: center;
   background-color: #F0F0F0;
 }
 
 .login-card {
-  margin: 0 30px 60px;
+  height: 65vh;
   padding: 20px 40px;
   width: 460px;
-  height: auto;
   box-shadow: 0 8px 26px -4px rgba(0,0,0,0.15);
   border-radius: 20px;
   background: var(--white);
   border: 1px solid #3C3232;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
 }
 .logo {
   font-size: 34px;
@@ -103,6 +107,7 @@ p {
 /* Forms */
 form {
   transition: opacity .15s ease;
+  width: 100%;
 }
 
 form.loading {
@@ -138,8 +143,8 @@ label {
 .username-input, .password-input {
   margin: 0 0 24px;
   padding: 11px 16px 9px;
-  width: 100%;
-  font-size: 16px;
+  width: 95%;
+  font-size: 16px;  
   line-height: 26px;
   color: var(--almost-black);
   border: 1px solid var(--grey);
@@ -224,8 +229,8 @@ input[type=submit] {
 }
 input[type=submit] {
   margin: 0 0 24px;
-  padding: 11px 30px 10px;
-  font-size: 14px;
+  padding: 12px 30px 10px;
+  font-size: 16px;
   line-height: 24px;
   text-transform: uppercase;
   letter-spacing: 1px;

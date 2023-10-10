@@ -5,6 +5,11 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
+from flask_mail import Mail, Message
+import random
+import string
+import datetime
+import sqlite3
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -22,6 +27,14 @@ login_manager.login_view = "login"
 def load_user(user_id):
   return User.query.get(int(user_id))
 
+# Configure Flask-Mail for sending emails using Gmail SMTP
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'ethandsnyder96@gmail.com'  # Replace with your Gmail email address
+app.config['MAIL_PASSWORD'] = '1lanmandragoran'  # Replace with your Gmail password
+
+mail = Mail(app)
 
 class User(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
@@ -56,6 +69,30 @@ class LoginForm(FlaskForm):
 @app.route('/')
 def index():
   return render_template('index.html')
+
+password_reset_tokens = {}
+
+# @app.route('forgot_password', methods=['GET', 'POST'])
+# def forgot_password():
+#   form = LoginForm()
+#   if request.method == "POST":
+#     email = User.query.filter_by(email=form.email.data).first()  # Check by email
+#     if email:
+#       token = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
+#       expiration_time = datetime.datetime.now() + datetime.timedelta(hours=1)
+#       password_reset_tokens[email] = {'token': token, 'expiration_time': expiration_time}
+#       # Send a password reset email
+#       msg = Message('Password Reset', sender='ethandsnyder96@example.com', recipients=[email])
+#       msg.body = f"Click the following link to reset your password: {url_for('reset_password', token=token, _external=True)}"
+#       mail.send(msg)
+
+#       flash('Password reset email sent. Check your inbox.', 'success')
+#       return redirect(url_for('login'))
+#     else:
+#       flash('Email address not found in the database. Please enter a valid email.', 'error')
+
+#     return render_template('forgot_email.html')
+
 
 @app.route('/dashboard/', methods=['GET', 'POST'])
 @login_required

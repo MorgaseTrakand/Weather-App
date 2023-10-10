@@ -108,12 +108,13 @@ a {
 }
 .main-temp {
   font-size: 140px;
-  font-size: calc(7vw + 112%);
+  font-size: calc(7vw + 130%);
+  font-size: 130px;
   font-weight: 600;
   filter: drop-shadow(1px 1px 2px #000);
 }
 .main-condition {
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 400;
   color: #625353;
 }
@@ -161,6 +162,7 @@ i {
   width: 100%;
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .card {
@@ -236,13 +238,46 @@ i {
     justify-content: center;
     align-items: center;
 }
+.hour1, .hour2, .hour3, .hour4, .rain4, .rain3, .rain2, .rain1 {
+  font-weight: 500;
+  font-size: 20px;
+  margin-left: 5px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+}
+.rain4, .rain3, .rain2, .rain1 {
+  font-weight: 400;
+}
+.time1, .time2, .time3, .time4 {
+  font-weight: 400;
+  font-size: 18px;
+  margin-left: 5px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.micro-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rain4 i, .rain3 i, .rain2 i, .rain1 i {
+  font-size: 24px;
+}
+#small-rain {
 
+}
 .hour-container {
   height: 10%;
   width: 80%;
   margin-top: 20px;
   border-radius: 8px;
   border: 1px solid #3C3232;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .message {
@@ -259,9 +294,41 @@ i {
   font-size: 24px;
   font-weight: 400;
 }
+@media (max-width: 1100px) {
+  .main-temp {
+    font-size: 110px;
+  }
+  .current-wind, .current-rain {
+    font-size: 28px;
+  }
+  i {
+    font-size: 34px;
+  } 
+}
 @media (max-width: 1024px) {
+  .current-wind, .current-rain {
+    font-size: 26px;
+  }
+  i {
+    font-size: 32px;
+  }
   .right-container {
     position: relative;
+  }
+  .card {
+    margin-left: 0.5vh;
+    margin-top: 0vh;
+    width: 18vh;
+    height: 20vh;
+  }
+  .card h1 {
+    font-size: 20px;
+  }
+  .next-temp1, .next-temp2, .next-temp3, .next-temp4 {
+    font-size: 24px;
+  }
+  .card h3 {
+    font-size: 20px;
   }
   .header {
     width: 100%;
@@ -291,6 +358,27 @@ i {
     width: 50%;
     height: 100%;
   }
+  .main-condition {
+    font-size: 30px;
+  }
+} 
+@media (max-width: 900px) {
+  .card {
+    width: 16vh;
+    height: 18vh;
+  }
+  .card h1 {
+    font-size: 18px;
+  }
+  .next-temp1, .next-temp2, .next-temp3, .next-temp4 {
+    font-size: 22px;
+  }
+  .card h3 {
+    font-size: 18px;
+  }
+  .main-condition {
+    font-size: 24px;
+  }
 }
 @media (max-width: 768px) {
   #searchBar {
@@ -301,7 +389,7 @@ i {
   }
   .login-button {
     display: none;
-  }
+  } 
 }
 
 .centered {
