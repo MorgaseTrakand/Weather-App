@@ -18,23 +18,22 @@
       <form action="" method="POST">
         {{ form.hidden_tag() }}
         {{ form.username(class="username-input") }}
-        <!--{{ form.email }}-->
         {{ form.password (class="password-input")}}
         <h2>Don't have account? <a href="{{ url_for('register')}}">Sign-Up Here</a></h2>
         {{ form.submit }}
-        {% if form.username.errors %}
-        <div class="error">{{ form.username.errors[0] }}</div>
-        {% endif %}
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="flash-messages">
-        {% for message in messages %}
-          <div class"error">{{ message }}</div>
-        {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
       </form>
     </div>
+    <div class="error-card">
+        <h1>Error Occurred</h1>
+        <h1>Continue</h1>
+    </div>
   </div>
+  {% if get_flashed_messages() %}
+  <script>
+    // Run GSAP code when there are flash messages
+    gsap.to(".center", {
+      x: 100,
+    });
+  </script>
+{% endif %}
 {% endblock %}

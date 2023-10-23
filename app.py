@@ -1,11 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_required, logout_user, current_user, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
-from flask_mail import Mail, Message
+from flask_mail import Mail, Message  
+from flask_session import Session 
 import random
 import string
 import datetime
@@ -15,6 +16,13 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['SECRET_KEY'] = 'thisisasecretkey'
+
+# Configure Flask-Session
+app.config['SESSION_TYPE'] = 'filesystem'  # You can choose a different session type
+Session(app)
+
+# Set a secret key for your application
+app.secret_key = 'your_secret_key'  # Replace with a secure random key
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -48,10 +56,11 @@ class RegisterForm(FlaskForm):
   password = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Password"})
   submit = SubmitField("Register")
   
-  def validate_username(self, username):
-    existing_user_name = User.query.filter_by(username=username.data).first()
-    if existing_user_name:
-      raise ValidationError("That username already exists. Please choose a different one")
+  # def validate_username(self, username):
+  #   existing_user_name = User.query.filter_by(username=username.data).first()
+  #   if existing_user_name:
+      
+  #     raise ValidationError("That username already exists. Please choose a different one")
 
 class forgotPasswordForm(FlaskForm):
   email = StringField(validators=[InputRequired()], render_kw={"placeholder": "Email"})
@@ -82,18 +91,13 @@ def reset_password(token):
         flash('Password reset link is invalid or has expired. Please request another reset link.', 'error')
 
     if request.method == 'POST':
-        # Handle form submission
         new_password = request.form.get('new_password')
 
-        # Hash the new password and update the user's password in the database
         user = User.query.filter_by(email=token_info['email']).first()
         user.password = bcrypt.generate_password_hash(new_password)  # Replace with your actual password hashing function
         db.session.commit()
 
-        # Invalidate the token
         del password_reset_tokens[token]
-
-        # Notify the user
         flash('Your password has been successfully reset. You can now log in with your new password.', 'success')
         return redirect(url_for('login'))  # Redirect to the login page
 
@@ -103,7 +107,7 @@ def reset_password(token):
 def forgotpassword():
   form = forgotPasswordForm()
   if request.method == "POST":
-    email = User.query.filter_by(email=form.email.data).first()  # Check by email
+    email = User.query.filter_by(email=form.email.data).first()
     if email:
       token = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
       expiration_time = datetime.datetime.now() + datetime.timedelta(hours=1)

@@ -56,6 +56,22 @@ p {
   margin: 24px 0;
 }
 
+.error-card {
+  border: 1px solid #3C3232;
+  border-radius: 12px;
+  height: 30vh;
+  width: 40vh;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #F0F0F0;
+  display: none;
+}
+.error-card h1 {
+  font-size: 30px;
+}
 /* Cards */
 .card-wrapper {
   height: 100vh;
